@@ -150,7 +150,7 @@ def render_tutoring_tab(example_data, key_prefix):
     # ---------------- Right Chat ----------------
     DELAY_SECONDS = 1.5
     with col_chat:
-        chat_container = st.container(height=600, border=True)
+        chat_container = st.container(height=700, border=True)
         with chat_container:
             placeholder = st.empty()
 
