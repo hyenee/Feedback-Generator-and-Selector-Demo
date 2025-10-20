@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_option_menu import option_menu
 import base64
 
 def get_base64(file_path):
@@ -11,18 +10,7 @@ def get_base64(file_path):
         st.error(f"이미지 파일을 찾을 수 없습니다: {file_path}")
         return None
 
-# --- 페이지 기본 설정 ---
 st.set_page_config(page_title="Performance Analysis", page_icon="📊", layout="wide", initial_sidebar_state="collapsed" )
-
-# st.markdown("""
-#     <style>
-#     html, body, [class*="st-"], [class*="css-"] {
-#         font-size: 1.1rem; /* 기본 폰트 크기보다 10% 크게 (이 값을 조절하세요) */
-#     }
-#     </style>
-#     """, unsafe_allow_html=True)
-
-# st.session_state.active_page = "performance_analysis"
 
 col1, _ = st.columns([0.3, 0.7]) 
 with col1:
@@ -35,22 +23,6 @@ with st.sidebar:
     st.page_link("pages/tutoring_demo.py", label="Tutoring Demo", icon="👩‍🏫")
     st.markdown("---")
 
-# selected = option_menu(
-#     menu_title=None,
-#     options=["Home", "How It Works", "Tutoring Demo"],
-#     icons=["house", "gear", "chat-dots"],
-#     menu_icon="cast",
-#     default_index=1,
-#     orientation="horizontal",
-# )
-
-# if selected == "Home":
-#     st.switch_page("home.py")
-# if selected == "How It Works":
-#     st.switch_page("pages/how_it_works.py")
-# if selected == "Tutoring Demo":
-#     st.switch_page("pages/tutoring_demo.py")
-
 # --- 페이지 콘텐츠 ---
 st.title("📊 Ranking Model Performance Analysis")
 st.info("Click the tabs below to view the experimental results.")
@@ -62,7 +34,6 @@ tab1, tab2, tab3, tab4 = st.tabs([
     "3️⃣ RQ3: Criteria Impact Analysis",
     "🔍 Case Study"
 ])
-
 
 # --- RQ1 탭 ---
 with tab1:
@@ -151,20 +122,15 @@ with tab4:
     predicted_ranking_list = ["GPT-4", "GPT-3.5", "PrepTutor", "Human", "DIRECT"]
     ground_truth_ranking_list = ["GPT-4", "GPT-3.5", "DIRECT", "Human", "PrepTutor"]
     
-    # --- [핵심 수정 2] 1등 피드백 텍스트 추출 ---
-    top_ranked_feedback_name = predicted_ranking_list[0] # "GPT-4"
+    top_ranked_feedback_name = predicted_ranking_list[0]
     top_ranked_feedback_text = feedback_candidates[top_ranked_feedback_name]
 
-    # --- 2단 레이아웃 생성 ---
     col1, col2 = st.columns([3, 2])
-
-    # --- 왼쪽 컬럼: Story 및 Chat Simulation ---
     with col1:
         st.subheader("📝 Story")
         st.container(height=200).markdown(story_text)
         st.subheader("💬 Chat Simulation")
         
-        # --- 1등 피드백을 채팅 기록에 동적으로 추가 ---
         chat_history = [
             {"role": "teacher", "text": "Why was a life much harder than it is today hundreds of years ago?"},
             {"role": "student", "text": "Because there were not any modern machines."},
@@ -188,7 +154,6 @@ with tab4:
                     </div>
                     """, unsafe_allow_html=True)
 
-    # --- 오른쪽 컬럼: Feedback Candidates 및 Ranking Analysis ---
     with col2:
         st.subheader("🧑‍🏫 Feedback Candidates")
         for name, text in feedback_candidates.items():
