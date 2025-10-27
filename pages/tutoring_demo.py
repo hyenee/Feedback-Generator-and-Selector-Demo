@@ -52,9 +52,22 @@ selected = option_menu(
     orientation="horizontal",
 )
 
+# --- (수정된 부분 1) ---
+def clear_all_chat_states():
+    """채팅 데모와 관련된 모든 세션 상태를 지웁니다."""
+    keys_to_clear = [
+        "messages_ex1", "anim_index_ex1", "auto_feedback_sent_ex1",
+        "messages_ex2", "anim_index_ex2", "auto_feedback_sent_ex2"
+    ]
+    for key in keys_to_clear:
+        if key in st.session_state:
+            del st.session_state[key]
+
 if selected == "Home":
+    clear_all_chat_states()
     st.switch_page("home.py")
 if selected == "How It Works":
+    clear_all_chat_states()
     st.switch_page("pages/how_it_works.py")
 
 
@@ -71,6 +84,34 @@ st.markdown("""
 .student-bubble {
     background-color: #F0F0F0; border: 1px solid #E0E0E0; color: #333; border-radius: 10px;
     padding: 10px 15px; margin-right: 10px; max-width: 80%; font-size: 0.95rem;
+}
+/* 라디오 버튼을 탭처럼 보이게 스타일링 */
+div[role="radiogroup"] {
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 2px solid #EEE;
+    margin-bottom: 20px;
+}
+div[role="radiogroup"] > label {
+    padding: 10px 20px;
+    margin: 0;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+div[role="radiogroup"] > label:hover {
+    background-color: #F8F8F8;
+}
+/* 선택된 탭 스타일 */
+div[role="radiogroup"] > label:has(input:checked) {
+    font-weight: 600;
+    color: #0068C9;
+    border-bottom: 2px solid #0068C9;
+}
+/* 라디오 버튼 자체는 숨김 */
+div[role="radiogroup"] input {
+    display: none;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -111,7 +152,15 @@ TUTORING_EXAMPLES = {
 }
 
 st.title("💬 English Tutoring Chat")
-tab1, tab2 = st.tabs(["Example 1", "Example 2"])
+
+selected_tab = st.radio(
+    "Select Example",
+    ["Example 1", "Example 2"],
+    horizontal=True,
+    label_visibility="collapsed",
+    on_change=clear_all_chat_states 
+)
+
 
 def render_tutoring_tab(example_data, key_prefix):
     msg_key = f"messages_{key_prefix}"
@@ -184,9 +233,7 @@ def render_tutoring_tab(example_data, key_prefix):
                             """, unsafe_allow_html=True)
                     st.session_state[anim_key] = i
 
-
-with tab1:
+if selected_tab == "Example 1":
     render_tutoring_tab(TUTORING_EXAMPLES["Example 1"], "ex1")
-
-with tab2:
+elif selected_tab == "Example 2":
     render_tutoring_tab(TUTORING_EXAMPLES["Example 2"], "ex2")
